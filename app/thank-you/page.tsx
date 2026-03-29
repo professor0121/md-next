@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import TankYouContent from "./TankYouContent";
+import TankYouContent from "./ThankYouContent";
 export default function Page() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
