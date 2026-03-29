@@ -11,6 +11,7 @@ export default function ThankYouContent() {
   const quantity = params.get("quantity");
   const total = params.get("total");
   const product = params.get("product");
+  const orderId=params.get("orderId")
   return (
     <div
       style={{
@@ -130,7 +131,7 @@ export default function ThankYouContent() {
                 maxWidth: "55%",
               }}
             >
-              ord-01212
+              {orderId}
             </span>
           </div>
 

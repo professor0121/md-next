@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import axiosInstance from "@/lib/axios";
 
 type Props = {
   popupOpen: boolean;
@@ -57,10 +58,18 @@ export default function OrderPopup({ popupOpen, setPopupOpen }: Props) {
   };
 
   // submit
-  const handleOrder = () => {
+  const handleOrder = async() => {
     if (!validate()) return;
 
     setLoading(true);
+    
+    const res = await axiosInstance.post("/order", {
+      ...form,
+      quantity,
+      total,
+      product: "Josh Power 4-in-1 कॉम्बो",
+    });
+    console.log("Order saved:", res.data);
     const query = new URLSearchParams({
       name: form.name,
       phone: form.phone,
@@ -68,19 +77,12 @@ export default function OrderPopup({ popupOpen, setPopupOpen }: Props) {
       pincode: form.pincode,
       quantity: quantity.toString(),
       total: total.toString(),
-      product:"Josh Power 4-in-1 कॉम्बो"
+      product:"Josh Power 4-in-1 कॉम्बो",
+      orderId:res.data.order.orderId.toString()
     }).toString();
 
-    router.push(`/thank-you?${query}`);
 
-    const msg = `
-    Name: ${form.name}
-    Phone: ${form.phone}
-    Address: ${form.address}
-    Pincode: ${form.pincode}
-    Quantity: ${quantity}
-    Total: ₹${total}`;
-    console.table(msg);
+    router.push(`/thank-you?${query}`);
     setLoading(false);
     setPopupOpen(false);
   };
