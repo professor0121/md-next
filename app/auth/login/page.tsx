@@ -1,11 +1,4 @@
-import React from 'react'
-
-const page = () => {
-  return (
-    <div>
-      
-    </div>
-  )
+import LonginContent from "./LonginContent"
+export default function Page() {
+  return <LonginContent />;
 }
-
-export default page
