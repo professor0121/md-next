@@ -40,17 +40,13 @@ const initialState: AuthState = {
   isAuthenticated: false,
 };
 
-
 export const loginUser = createAsyncThunk<
   AuthResponse,
   { email: string; password: string },
   { rejectValue: string }
 >("auth/login", async (data, { rejectWithValue }) => {
   try {
-    const res = await axiosInstance.post<AuthResponse>(
-      "/admin/login",
-      data
-    );
+    const res = await axiosInstance.post<AuthResponse>("/admin/login", data);
 
     // Save token
     localStorage.setItem("token", res.data.token);
@@ -62,7 +58,17 @@ export const loginUser = createAsyncThunk<
   }
 });
 
-
+export const getProfile = createAsyncThunk(
+  "auth/profile",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.get("/admin/profile");
+      return res.data.user;
+    } catch (err: unknown) {
+      return rejectWithValue("Not authenticated");
+    }
+  },
+);
 
 export const logoutUser = createAsyncThunk("auth/logout", async () => {
   localStorage.removeItem("token");
@@ -89,11 +95,21 @@ const authSlice = createSlice({
           state.user = action.payload.user;
           state.token = action.payload.token;
           state.isAuthenticated = true;
-        }
+        },
       )
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Login error";
+      })
+
+      
+      .addCase(getProfile.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isAuthenticated = true;
+      })
+      .addCase(getProfile.rejected, (state) => {
+        state.user = null;
+        state.isAuthenticated = false;
       })
 
       // 🚪 LOGOUT

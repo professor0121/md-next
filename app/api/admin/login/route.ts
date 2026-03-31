@@ -39,12 +39,12 @@ export async function POST(req: Request) {
     }
 
     // 🔐 Generate JWT token
-   const token = await signToken(admin.email as string); // ✅
+    const token = await signToken(admin.email as string);
 
-    return NextResponse.json(
+    // 🍪 Create response
+    const response = NextResponse.json(
       {
         message: "Login successful",
-        token,
         admin: {
           id: admin._id,
           email: admin.email,
@@ -52,6 +52,17 @@ export async function POST(req: Request) {
       },
       { status: 200 }
     );
+
+    // ✅ Set cookie
+    response.cookies.set("token", token, {
+      httpOnly: true, // 🔐 not accessible via JS
+      secure: process.env.NODE_ENV === "production", // only https in prod
+      sameSite: "strict",
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      path: "/",
+    });
+
+    return response;
   } catch (error) {
     console.error(error);
 
