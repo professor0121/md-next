@@ -2,7 +2,7 @@ import Image from "next/image";
 import Script from "next/script";
 import React from "react";
 
-const FacebookPixel = () => {
+const MetaPixel = () => {
   return (
     <>
       <Script
@@ -36,4 +36,4 @@ fbq('track', 'PageView');
   );
 };
 
-export default FacebookPixel;
+export default MetaPixel;
