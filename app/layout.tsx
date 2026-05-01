@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import ReduxProvider from "@/store/provider";
-import dynamic from "next/dynamic";
-const MetaPixel=dynamic(import('../component/MetaPixel'))
+import MetaPixel from "@/component/MetaPixel";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
