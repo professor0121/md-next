@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import ReduxProvider from "@/store/provider";
+import MetaPixel from "@/component/MetaPixel";
+import { Suspense } from "react";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
@@ -40,6 +42,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={poppins.variable}>
       <body>
+         <Suspense fallback={null}>
+          <MetaPixel />
+        </Suspense>
         <ReduxProvider>{children}</ReduxProvider>
       </body>
     </html>
